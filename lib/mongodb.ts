@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
-const MONGODB_URI = process.env.MONGODB_URI || "";
+const MONGODB_URI =
+  process.env.MONGODB_URI || "";
 
 let cached = (global as any).mongoose;
 
@@ -12,11 +13,6 @@ if (!cached) {
 }
 
 async function connectDB() {
-  if (!MONGODB_URI) {
-    console.log("MongoDB URI not found, skipping DB connection.");
-    return null;
-  }
-
   if (cached.conn) {
     return cached.conn;
   }

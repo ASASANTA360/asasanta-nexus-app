@@ -3,11 +3,8 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 
-export default function SignupPage() {
+export default function LoginPage() {
   const router = useRouter();
-
-  const [name, setName] =
-    useState("");
 
   const [email, setEmail] =
     useState("");
@@ -21,7 +18,7 @@ export default function SignupPage() {
   const [error, setError] =
     useState("");
 
-  async function handleSignup(
+  async function handleLogin(
     e: React.FormEvent
   ) {
     e.preventDefault();
@@ -31,7 +28,7 @@ export default function SignupPage() {
       setError("");
 
       const res = await fetch(
-        "/api/auth/signup",
+        "/api/auth/login",
         {
           method: "POST",
 
@@ -41,7 +38,6 @@ export default function SignupPage() {
           },
 
           body: JSON.stringify({
-            name,
             email,
             password,
           }),
@@ -56,9 +52,14 @@ export default function SignupPage() {
         return;
       }
 
-      router.push("/login");
+      localStorage.setItem(
+        "token",
+        data.token
+      );
+
+      router.push("/dashboard");
     } catch (err) {
-      setError("Signup failed");
+      setError("Login failed");
     } finally {
       setLoading(false);
     }
@@ -76,15 +77,15 @@ export default function SignupPage() {
         <div className="text-center">
 
           <div className="inline-flex items-center px-5 py-2 rounded-full border border-cyan-400/20 bg-cyan-400/10 text-gray-300 mb-8">
-            AI User Registration
+            Secure Authentication
           </div>
 
           <h1 className="text-5xl font-black">
-            Create Account
+            Welcome Back
           </h1>
 
           <p className="text-gray-400 mt-4">
-            Join the next generation AI infrastructure platform.
+            Access your AI-powered infrastructure dashboard.
           </p>
 
         </div>
@@ -98,28 +99,9 @@ export default function SignupPage() {
 
         {/* Form */}
         <form
-          onSubmit={handleSignup}
+          onSubmit={handleLogin}
           className="mt-10 space-y-6"
         >
-
-          {/* Name */}
-          <div>
-
-            <label className="text-gray-400 block mb-3">
-              Full Name
-            </label>
-
-            <input
-              type="text"
-              placeholder="Enter your full name"
-              value={name}
-              onChange={(e) =>
-                setName(e.target.value)
-              }
-              className="w-full h-14 rounded-2xl bg-black border border-white/10 px-5 outline-none focus:border-cyan-400/40 transition-all duration-300"
-            />
-
-          </div>
 
           {/* Email */}
           <div>
@@ -149,13 +131,30 @@ export default function SignupPage() {
 
             <input
               type="password"
-              placeholder="Create password"
+              placeholder="Enter your password"
               value={password}
               onChange={(e) =>
                 setPassword(e.target.value)
               }
               className="w-full h-14 rounded-2xl bg-black border border-white/10 px-5 outline-none focus:border-cyan-400/40 transition-all duration-300"
             />
+
+          </div>
+
+          {/* Remember */}
+          <div className="flex items-center justify-between text-sm text-gray-400">
+
+            <label className="flex items-center gap-2">
+
+              <input type="checkbox" />
+
+              Remember me
+
+            </label>
+
+            <a href="#">
+              Forgot password?
+            </a>
 
           </div>
 
@@ -167,8 +166,8 @@ export default function SignupPage() {
           >
 
             {loading
-              ? "Creating Account..."
-              : "Create Account"}
+              ? "Authenticating..."
+              : "Login Securely"}
 
           </button>
 

@@ -1,11 +1,8 @@
 import "./globals.css";
-import Navbar from "@/components/Navbar";
-import Footer from "@/components/Footer";
 
 export const metadata = {
   title: "Asasanta Nexus",
-  description:
-    "AI-powered decentralized identity and lending infrastructure.",
+  description: "AI-powered digital infrastructure for Africa",
 };
 
 export default function RootLayout({
@@ -15,11 +12,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className="bg-black text-white">
-        <Navbar />
+
+      <body className="bg-black text-white antialiased">
         {children}
-        <Footer />
       </body>
+
     </html>
   );
 }

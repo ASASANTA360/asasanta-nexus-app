@@ -1,42 +1,40 @@
-import Link from "next/link";
+<nav className="w-full border-b border-white/10 backdrop-blur-xl sticky top-0 z-50 bg-black/70">
 
-export default function Navbar() {
-  return (
-    <nav className="border-b border-gray-900 bg-black text-white">
-      <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link
-          href="/"
-          className="text-2xl font-bold"
-        >
-          Asasanta Nexus
-        </Link>
+  <div className="max-w-7xl mx-auto px-6 py-5 flex items-center justify-between">
 
-        <div className="flex gap-6 text-sm">
-          <Link href="/">
-            Home
-          </Link>
+    <h1 className="text-3xl font-bold tracking-tight">
+      Asasanta Nexus
+    </h1>
 
-          <Link href="/dashboard">
-            Dashboard
-          </Link>
+    <div className="hidden md:flex items-center gap-10 text-gray-300">
 
-          <Link href="/kyc">
-            KYC
-          </Link>
+      <a href="/" className="hover:text-white transition">
+        Home
+      </a>
 
-          <Link href="/loans">
-            Loans
-          </Link>
+      <a href="/dashboard" className="hover:text-white transition">
+        Dashboard
+      </a>
 
-          <Link href="/admin">
-            Admin
-          </Link>
+      <a href="/kyc" className="hover:text-white transition">
+        KYC
+      </a>
 
-          <Link href="/auth/login">
-            Login
-          </Link>
-        </div>
-      </div>
-    </nav>
-  );
-}
+      <a href="/loans" className="hover:text-white transition">
+        Loans
+      </a>
+
+      <button className="px-6 py-3 rounded-2xl bg-white text-black font-semibold hover:scale-105 transition-all duration-300">
+        Login
+      </button>
+
+    </div>
+
+    {/* Mobile */}
+    <button className="md:hidden text-3xl">
+      ☰
+    </button>
+
+  </div>
+
+</nav>

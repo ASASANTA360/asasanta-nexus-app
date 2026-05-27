@@ -1,6 +1,9 @@
+import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
+
 import connectDB from "@/lib/mongodb";
 import User from "@/models/User";
-import bcrypt from "bcryptjs";
 
 export async function POST(req: Request) {
   try {
@@ -8,38 +11,60 @@ export async function POST(req: Request) {
 
     const body = await req.json();
 
+    const { email, password } = body;
+
     const user = await User.findOne({
-      email: body.email,
+      email,
     });
 
     if (!user) {
-      return Response.json({
-        success: false,
-        message: "Invalid credentials",
+      return NextResponse.json({
+        error: "User not found",
       });
     }
 
-    const passwordMatch = await bcrypt.compare(
-      body.password,
-      user.password
+    const isMatch =
+      await bcrypt.compare(
+        password,
+        user.password
+      );
+
+    if (!isMatch) {
+      return NextResponse.json({
+        error: "Invalid credentials",
+      });
+    }
+
+    const token = jwt.sign(
+      {
+        id: user._id,
+      },
+      process.env.JWT_SECRET!,
+      {
+        expiresIn: "7d",
+      }
     );
 
-    if (!passwordMatch) {
-      return Response.json({
-        success: false,
-        message: "Invalid credentials",
+    const response =
+      NextResponse.json({
+        success: true,
       });
-    }
 
-    return Response.json({
-      success: true,
-      message: "Login successful",
-      user,
-    });
+    response.cookies.set(
+      "token",
+      token,
+      {
+        httpOnly: true,
+        secure: false,
+        path: "/",
+        maxAge: 60 * 60 * 24 * 7,
+      }
+    );
+
+    return response;
   } catch (error) {
-    return Response.json({
-      success: false,
-      message: "Login failed",
+    return NextResponse.json({
+      error: "Login failed",
     });
   }
 }
